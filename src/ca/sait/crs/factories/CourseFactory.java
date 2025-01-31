@@ -1,8 +1,9 @@
 package ca.sait.crs.factories;
 
-
 import ca.sait.crs.contracts.Course;
 import ca.sait.crs.exceptions.CannotCreateCourseException;
+import ca.sait.crs.models.OptionalCourse;
+import ca.sait.crs.models.RequiredCourse;
 
 /**
  * Creates course instances.
@@ -34,7 +35,11 @@ public class CourseFactory {
             throw new CannotCreateCourseException("Course credits is invalid.");
         }
 
-        return null;
+        if (credits > 0) {
+            return new RequiredCourse(code, name, credits);
+        } else {
+            return new OptionalCourse(code, name);
+        }
     }
 
     /**
@@ -43,7 +48,9 @@ public class CourseFactory {
      * @return True if the course code is valid.
      */
     private boolean validateCode(String code) {
-        // TODO: Add logic to test code is valid.
+        if (code.length() < 8) {
+        	return false;
+        }
         return true;
     }
 
@@ -53,7 +60,9 @@ public class CourseFactory {
      * @return True if course name is valid.
      */
     private boolean validateName(String name) {
-        // TODO: Add logic to test name is valid.
+        if (name.length() > 30) {
+        	return false;
+        }
         return true;
     }
 
@@ -64,6 +73,9 @@ public class CourseFactory {
      */
     private boolean validateCredits(int credits) {
         // TODO: Add logic to test credits is valid.
+    	if (credits <= 2.0) {
+    		return false;
+    	}
         return true;
     }
 }
